@@ -1,0 +1,66 @@
+
+<div class="editor-container">
+	<div *ngIf="roomId" class="room-link-box">
+		<span>Room Link:</span>
+		<a [href]="origin + '/editor/' + roomId" target="_blank" class="room-link">{{origin + '/editor/' + roomId}}</a>
+		<button class="copy-btn" (click)="copyRoomLink()">Copy</button>
+	</div>
+
+	<!-- Room name and description display -->
+	<div *ngIf="roomName" class="room-info">
+		<h2>{{ roomName }}</h2>
+		<p *ngIf="roomDescription">{{ roomDescription }}</p>
+	</div>
+
+	<header class="editor-header">
+		<h2>Online Compiler</h2>
+	</header>
+	<div class="editor-main">
+<div class="editor-left">
+  <div class="editor-toolbar">
+    <select [(ngModel)]="language" 
+            (ngModelChange)="saveEditorData()" 
+            title="Select Language">
+      <option value="">Select Language</option>
+      <option value="python">Python</option>
+      <option value="cpp">C++</option>
+      <option value="java">Java</option>
+      <option value="js">JavaScript</option>
+    </select>
+  </div>
+
+  <textarea class="code-area" rows="16" 
+            [(ngModel)]="code" 
+            (ngModelChange)="saveEditorData()" 
+            placeholder="# cook your dish here"></textarea>
+
+  <textarea class="input-area" rows="3" 
+            [(ngModel)]="input" 
+            (ngModelChange)="saveEditorData()" 
+            placeholder="Enter Input here"></textarea>
+
+  <button class="run-btn" (click)="runCode()">Run</button>
+
+  <div class="output-section output-below">
+    <div class="output-label">Output</div>
+    <div class="output-box">{{output}}</div>
+  </div>
+</div>
+
+		<div class="editor-chat">
+			<h3>Live Chat</h3>
+			<div class="chat-messages" #chatMessagesDiv>
+				<div *ngFor="let msg of chatMessages" class="chat-message" [ngClass]="{'me': msg.user === 'You', 'other': msg.user !== 'You'}">
+					<div class="bubble">
+						<span class="chat-user" *ngIf="msg.user !== 'You'">{{msg.user}}:</span>
+						<span>{{msg.text}}</span>
+					</div>
+				</div>
+			</div>
+			<form (ngSubmit)="sendMessage()" class="chat-form chat-form-bottom">
+				<input type="text" [(ngModel)]="chatInput" name="chatInput" placeholder="Type a message..." required />
+				<button type="submit"><span class="send-icon">&#9658;</span></button>
+			</form>
+		</div>
+	</div>
+</div>

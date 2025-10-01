@@ -7,10 +7,87 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 
+import fs from 'fs';
+import bcrypt from 'bcryptjs';
+import bodyParser from 'body-parser';
+
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+
+// Path to users JSON file
+const usersFile = join(import.meta.dirname, 'users.json');
+
+
+// User type
+type User = { name: string; email: string; password: string };
+
+// Helper to read users from file
+function readUsers(): User[] {
+  if (!fs.existsSync(usersFile)) return [];
+  const data = fs.readFileSync(usersFile, 'utf-8');
+  try {
+    return JSON.parse(data) as User[];
+  } catch {
+    return [];
+  }
+}
+
+// Helper to write users to file
+function writeUsers(users: User[]): void {
+  // Ensure directory exists
+  const path = require('path');
+  const dir = path.dirname(usersFile);
+  if (dir && !fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+}
+
+// Signup endpoint
+app.post('/api/signup', async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
+    res.status(400).json({ error: 'All fields are required' });
+    return;
+  }
+  const users = readUsers();
+  if (users.find((u: User) => u.email === email)) {
+    res.status(400).json({ error: 'User already exists' });
+    return;
+  }
+  const hashedPassword = await bcrypt.hash(password, 10);
+  users.push({ name, email, password: hashedPassword });
+  writeUsers(users);
+  res.status(201).json({ message: 'Signup successful' });
+  return;
+});
+
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ error: 'All fields are required' });
+    return;
+  }
+  const users = readUsers();
+  const user = users.find((u: User) => u.email === email);
+  if (!user) {
+    res.status(400).json({ error: 'Invalid credentials' });
+    return;
+  }
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    res.status(400).json({ error: 'Invalid credentials' });
+    return;
+  }
+  res.json({ message: 'Login successful', user: { name: user.name, email: user.email } });
+  return;
+});
 
 /**
  * Example Express Rest API endpoints can be defined here.
