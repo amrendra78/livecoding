@@ -1,5 +1,3 @@
-
-
 import { SignupComponent } from './signup/signup';
 import { LoginComponent } from './login/login';
 import { HomeComponent } from './home/home';
@@ -12,5 +10,9 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'editor/:roomId', component: EditorComponent },
+  {
+    path: 'editor/:roomId',
+    component: EditorComponent,
+    data: { renderMode: 'ssr' } // SSR mode enable
+  },
 ];
