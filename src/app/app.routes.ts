@@ -13,6 +13,6 @@ export const routes: Routes = [
   {
     path: 'editor/:roomId',
     component: EditorComponent,
-    data: { renderMode: 'ssr' } // SSR mode enable
+    data: { renderMode: 'ssr' } // SSR mode for dynamic route
   },
 ];

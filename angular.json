@@ -36,6 +36,14 @@
             "browserTarget": "livecoding:build:production",
             "routes": ["/", "/signup", "/login", "/home"]
           }
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "configurations": {
+            "production": { "buildTarget": "livecoding:build:production" },
+            "development": { "buildTarget": "livecoding:build:development" }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
