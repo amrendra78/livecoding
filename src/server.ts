@@ -5,6 +5,7 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import cors from 'cors';
 import { join } from 'node:path';
 
 import fs from 'fs';
@@ -18,6 +19,9 @@ const angularApp = new AngularNodeAppEngine();
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
+
+// Enable CORS so the Angular dev server (localhost:4200) can call the API
+app.use(cors());
 
 // Path to users JSON file
 const usersFile = join(import.meta.dirname, 'users.json');
@@ -50,6 +54,7 @@ function writeUsers(users: User[]): void {
 
 // Signup endpoint
 app.post('/api/signup', async (req, res) => {
+  console.log('/api/signup called', { body: req.body });
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
     res.status(400).json({ error: 'All fields are required' });
@@ -69,6 +74,7 @@ app.post('/api/signup', async (req, res) => {
 
 // Login endpoint
 app.post('/api/login', async (req, res) => {
+  console.log('/api/login called', { body: req.body });
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400).json({ error: 'All fields are required' });
