@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './signup.css'
 })
 export class SignupComponent {
-
   name = '';
   email = '';
   password = '';
@@ -22,13 +21,9 @@ export class SignupComponent {
   onSubmit(event: Event) {
     event.preventDefault();
     this.error = '';
-    this.auth.signup(this.name, this.email, this.password).subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
-      },
-      error: (err) => {
-        this.error = err.error?.error || 'Signup failed';
-      }
+    this.auth.signup(this.name,this.email,this.password).subscribe({
+      next: ()=>this.router.navigate(['/login']),
+      error: err => this.error = err.error?.message || 'Signup failed'
     });
   }
 }

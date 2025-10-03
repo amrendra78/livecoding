@@ -11,7 +11,6 @@ import { CommonModule } from '@angular/common';
   styleUrl: './login.css'
 })
 export class LoginComponent {
-
   email = '';
   password = '';
   error = '';
@@ -21,13 +20,9 @@ export class LoginComponent {
   onSubmit(event: Event) {
     event.preventDefault();
     this.error = '';
-    this.auth.login(this.email, this.password).subscribe({
-      next: () => {
-        this.router.navigate(['/home']);
-      },
-      error: (err) => {
-        this.error = err.error?.error || 'Login failed';
-      }
+    this.auth.login(this.email,this.password).subscribe({
+      next: ()=>this.router.navigate(['/home']),
+      error: err => this.error = err.error?.message || 'Login failed'
     });
   }
 }
