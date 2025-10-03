@@ -1,4 +1,5 @@
+// src/environments/environment.ts
 export const environment = {
-  production: true,
-  apiUrl: 'https://livecoding-cli7.vercel.app'  // apna deployed backend ka link
+  production: false,
+  apiUrl: 'http://localhost:3000'  // your local backend URL
 };
