@@ -9,29 +9,35 @@ const app = express();
 app.use(express.json());
 
 // ----------------- CORS -----------------
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
+// FRONTEND_URL can be a comma-separated list of allowed origins
+const rawFrontend = process.env.FRONTEND_URL || 'http://localhost:4200';
+const frontendList = rawFrontend.split(',').map(s => s.trim()).filter(Boolean);
 
-const allowedOrigins = [
-  FRONTEND_URL,
+const allowedOriginsSet = new Set([
+  ...frontendList,
   'http://localhost:4200',
-];
+  'http://127.0.0.1:4200'
+]);
 
 const corsOptions = {
   origin: function (origin, callback) {
+    // No origin (e.g., curl, server-to-server requests) — allow
     if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      console.log('❌ Blocked by CORS:', origin);
-      callback(new Error('CORS policy does not allow access from this origin.'), false);
+    if (allowedOriginsSet.has(origin)) {
+      return callback(null, true);
     }
+    console.warn('❌ Blocked by CORS, origin not allowed:', origin);
+    return callback(new Error('CORS policy does not allow access from this origin.'), false);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 };
 
+console.log('Allowed CORS origins:', Array.from(allowedOriginsSet).join(', '));
 app.use(cors(corsOptions));
+// Ensure preflight requests are handled
+app.options('*', cors(corsOptions));
 
 // ---------------- MongoDB Connection -----------------
 const mongoURI = process.env.MONGO_URI;

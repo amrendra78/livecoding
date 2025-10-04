@@ -5,15 +5,15 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = environment.apiUrl; // localhost or Vercel URL
 
   constructor(private http: HttpClient) {}
 
-  signup(name: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, { name, email, password });
+  signup(data: { name: string; email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/signup`, data);
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/login`, { email, password });
+  login(data: { email: string; password: string }): Observable<any> {
+    return this.http.post(`${this.baseUrl}/api/login`, data);
   }
 }

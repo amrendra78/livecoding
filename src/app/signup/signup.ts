@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './signup.html',
-  styleUrl: './signup.css'
+  styleUrls: ['./signup.css']
 })
 export class SignupComponent {
   name = '';
@@ -21,8 +22,8 @@ export class SignupComponent {
   onSubmit(event: Event) {
     event.preventDefault();
     this.error = '';
-    this.auth.signup(this.name,this.email,this.password).subscribe({
-      next: ()=>this.router.navigate(['/login']),
+    this.auth.signup({ name: this.name, email: this.email, password: this.password }).subscribe({
+      next: () => this.router.navigate(['/login']),
       error: err => this.error = err.error?.message || 'Signup failed'
     });
   }
