@@ -1,0 +1,155 @@
+<div class="home-container">
+	<header class="navbar">
+		<div class="logo">CodeCollab</div>
+		<!-- <nav>
+			<a href="#">Home</a>
+			<a href="#features">Features</a>
+			<a href="#how">How It Works</a>
+			<a href="#login">Login</a>
+			<a href="#signup" class="signup-btn">Sign Up</a>
+		</nav> -->
+	</header>
+
+	<section class="room-section">
+		<!-- Create Room Card -->
+		<div class="room-card">
+			<h2>Create Room</h2>
+			<form (ngSubmit)="onCreateRoom()" #createRoomForm="ngForm">
+				<input type="text" name="roomName" [(ngModel)]="roomName" placeholder="Room Name" required />
+				<textarea name="roomDescription" [(ngModel)]="roomDescription" placeholder="Description"
+					rows="2"></textarea>
+				<input type="file" name="roomFile" (change)="onFileChange($event)"
+					title="Upload file for room (optional)" placeholder="Upload file (optional)" />
+				<button type="submit" class="primary">Create Room</button>
+			</form>
+		</div>
+		<!-- Join Room Card -->
+		<div class="room-card">
+			<h2>Join Room</h2>
+			<form (ngSubmit)="onJoinRoom()" #joinRoomForm="ngForm">
+				<input type="text" name="joinRoomId" [(ngModel)]="joinRoomId" placeholder="Room ID" required />
+				<input type="text" name="inviteCode" [(ngModel)]="inviteCode" placeholder="Invite Code" />
+				<button type="submit" class="secondary">Join Room</button>
+			</form>
+		</div>
+	</section>
+
+<!-- Created/Joined Rooms List -->
+<section class="room-list-section">
+  <div class="room-list-flex">
+    <!-- Created Rooms -->
+    <div class="room-list-card">
+      <h3>Created Rooms (Host)</h3>
+      <div *ngIf="!createdRooms.length" class="room-list-empty">
+        No created rooms found.
+      </div>
+      <ul *ngIf="createdRooms.length" class="room-list">
+        <li *ngFor="let room of createdRooms" class="room-item">
+          <div class="room-item-content">
+            <a [routerLink]="['/editor', room.id]"
+               [queryParams]="{ name: room.name, description: room.description }"
+               class="room-link">
+              <strong>{{room.name}}</strong>
+              <span *ngIf="room.description"> - {{room.description}}</span>
+              <br />
+              <small>ID: {{room.id}}</small>
+            </a>
+            <button class="delete-btn" (click)="deleteCreatedRoom(room.id)">Delete</button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Joined Rooms -->
+<div class="room-list-card">
+  <h3>Joined Rooms</h3>
+  <div *ngIf="!joinedRooms.length" class="room-list-empty">
+    No joined rooms found.
+  </div>
+  <ul *ngIf="joinedRooms.length" class="room-list">
+    <li *ngFor="let room of joinedRooms" class="room-item">
+      <div class="room-item-content">
+        <a [routerLink]="['/editor', room.id]"
+           [queryParams]="{ name: room.name, description: room.description }"
+           class="room-link">
+          <strong>{{room.name}}</strong>
+          <span *ngIf="room.description"> - {{room.description}}</span>
+          <br />
+          <small>ID: {{room.id}}</small>
+        </a>
+        <button class="delete-btn" (click)="deleteJoinedRoom(room.id)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+  </div>
+</section>
+
+
+
+
+
+	<section id="features" class="features">
+		<h2>Features</h2>
+		<div class="feature-list">
+			<div class="feature-card">
+				<span class="icon">💻</span>
+				<h3>Real-Time Editing</h3>
+				<p>Edit code together with instant updates for all participants.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🎨</span>
+				<h3>Syntax Highlighting</h3>
+				<p>Beautiful code highlighting for multiple languages.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">🕒</span>
+				<h3>Version History</h3>
+				<p>Track changes and restore previous code snapshots.</p>
+			</div>
+			<div class="feature-card">
+				<span class="icon">💬</span>
+				<h3>Chat</h3>
+				<p>Discuss ideas and code with your team in real-time.</p>
+			</div>
+		</div>
+	</section>
+
+	<section id="how" class="how-it-works">
+		<h2>How It Works</h2>
+		<div class="steps">
+			<div class="step">
+				<span class="step-number">1</span>
+				<p>Create or join a room</p>
+			</div>
+			<div class="step">
+				<span class="step-number">2</span>
+				<p>Share the link with collaborators</p>
+			</div>
+			<div class="step">
+				<span class="step-number">3</span>
+				<p>Start coding together</p>
+			</div>
+		</div>
+	</section>
+	<!-- 
+	<section class="chat-section">
+		<h2>Live Chat</h2>
+		<div class="chat-box">
+			<div class="chat-messages">
+				<div *ngFor="let msg of chatMessages" class="chat-message">
+					<span class="chat-user">{{msg.user}}:</span> <span>{{msg.text}}</span>
+				</div>
+			</div>
+			<form (ngSubmit)="sendMessage()" class="chat-form">
+				<input type="text" [(ngModel)]="chatInput" name="chatInput" placeholder="Type a message..." required />
+				<button type="submit">Send</button>
+			</form>
+		</div>
+	</section> -->
+
+	<footer class="footer">
+		<p>&copy; 2025 CodeCollab. All rights reserved.</p>
+	</footer>
+</div>

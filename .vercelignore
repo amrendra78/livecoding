@@ -1,0 +1,41 @@
+# Ignore local deps and build/cache artifacts so Vercel upload stays small
+node_modules/
+.angular/
+.vscode/
+.idea/
+.git/
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+*.tgz
+coverage/
+local-history/
+.cache/
+dist/
+dist/**
+build/
+.tmp/
+.env
+.env.*
+# Keep the public folder and src; Vercel needs source and vercel.json
+# Exclude large editor or system files
+*.zip
+*.7z
+*.rar
+
+# If you have any large database or storage files locally
+*.sqlite
+*.db
+users.json
+
+# Avoid uploading node_modules inside api as well
+api/node_modules/
+
+# Angular cache and build outputs
+.angular/**
+
+# Ignore any platform-specific files
+Thumbs.db
+
