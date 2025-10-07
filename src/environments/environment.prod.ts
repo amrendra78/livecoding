@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://livecoding-backend.vercel.app/api'
+  apiUrl: 'https://my-backend-app-seven.vercel.app'
 };
