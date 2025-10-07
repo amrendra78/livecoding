@@ -1,4 +1,5 @@
+// environments/environment.ts
 export const environment = {
   production: false,
-  apiUrl: 'https://my-backend-app-seven.vercel.app'
+  apiUrl: 'http://localhost:3000'  // Your local backend
 };
